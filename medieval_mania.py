@@ -67,8 +67,8 @@ def initialise_game():
 
     shinobi_ninja = light_unit("Shinobi Ninja")
     samurai = medium_unit("Samurai")
-    ronin_pyrotechnics = heavy_unit("Ronin Pyrotechnics")
-    japanese = Army("Japanese", shinobi_ninja, samurai, ronin_pyrotechnics)
+    hwacha_engineers = heavy_unit("Hwacha Engineers")
+    japanese = Army("Japanese", shinobi_ninja, samurai, hwacha_engineers)
 
     horseback_archers = light_unit("Horseback Archers")
     nomad_warriors = medium_unit("Nomad Warriors")
