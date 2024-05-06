@@ -55,7 +55,7 @@ class heavy_unit:
             enemy.army.health -= 30
 
 
-def initialise_game():
+def initialise_armies():
 
     auxiliary_archers = light_unit("Auxiliary Archers")
     legionaries = medium_unit("Legionaries")
@@ -75,15 +75,37 @@ def initialise_game():
 
     horseback_archers = light_unit("Horseback Archers")
     nomad_warriors = medium_unit("Nomad Warriors")
-    steppe_saboteur = heavy_unit("Steppe Saboteur")
-    mongols = Army("Mamluks", horseback_archers,
-                   nomad_warriors, steppe_saboteur)
+    steppe_saboteurs = heavy_unit("Steppe Saboteurs")
+    mongols = Army("Mongols", horseback_archers,
+                   nomad_warriors, steppe_saboteurs)
 
-    print("Game Initialised")
+    return [mongols, japanese, mamluks, romans]
 
 
 def how_to_play():
     print("these are the game rules")
+
+
+def select_army(armies):
+    print("\nSelect an empire")
+    army_choice = input(
+        " 1. Mongol \n 2. Japanese \n 3. Mamluk \n 4. Roman \nEnter choice:")
+    return armies[int(army_choice)-1]
+
+
+def army_synopsis(army_name):
+
+    if army_name == "Mongols":
+        return "\nA great choice! The Mongol steppe is known for it's ruthlessness and tenacity on the battlefield, which lead to the fastest growth of an empire we had ever seen.\n\nWith their nomadic warriors and horseback archers, the motto for this force is, hit them hard and fast! \n\nUnits: \nLight - Horseback Archers \nMedium - Nomad Warriors \nHeavy - Steppe Saboteurs\n"
+
+    elif army_name == "Romans":
+        return "\nFrom your choice, you are either an admirer of tradition or someone who upholds the doctrine of papal infallibility. \n\nThe Holy Roman Empire, not to be mistaken with the ancient romans, are nevertheless a continuation of the same great empiric tradition. \n\nKnown for their studded steel armour and long swords, their defense is impenetrable while striking with force! \n\nUnits: \nLight - Horseback Archers \nMedium - Nomad Warriors \nHeavy - Steppe Saboteurs\n"
+
+    elif army_name == "Mamluks":
+        return "\nIt is said that when the Arabs were unable to maintain the islamic empire they had formed, the Persians carried the intellectual tradition while the Turks spearheaded the military. \n\nThis military is best summed by its elite class of warriors, the Janissaries, a battalion of young men raised and tempered by an intense regimen of martial training and discipline. \n\nUnits: \nLight - Nubian Archers \nMedium - Janissaries \nHeavy - Turkic Cavalry\n"
+
+    elif army_name == "Japanese":
+        return "\nThrough their adherence to the Bushido code, the Japanese army and its great martial tradition is a testament to chivalry and benevolence. During the Mongol invasion of Japan, despite the ruthlessness of the invading forces of Kublai, the Japanese managed to defend their island while staying true to their morals. \n\nNothing is more emblematic of a true warrior than a samurai and his hardened Katana. \n\nLight - Shinobi Ninja \nMedium - Samurai \nHeavy - Hwacha Engineers\n"
 
 
 run = True
@@ -92,10 +114,11 @@ while run:
     menu_input = input(
         " 1. Play Game \n 2. How To Play \n 3. Quit Game \nEnter choice: ")
     if menu_input == "1":
-        initialise_game()
+        armies = initialise_armies()
+        player_army = select_army(armies)
+        print(army_synopsis(player_army.name))
         run = False
     elif menu_input == "2":
         how_to_play()
-        run = False
     elif menu_input == "3":
         run = False
