@@ -1,3 +1,6 @@
+print("program starting")
+
+
 class Army:
     def __init__(self, name, light_unit, medium_unit, heavy_unit):
         self.name = name
@@ -76,5 +79,23 @@ def initialise_game():
     mongols = Army("Mamluks", horseback_archers,
                    nomad_warriors, steppe_saboteur)
 
+    print("Game Initialised")
 
-initialise_game()
+
+def how_to_play():
+    print("these are the game rules")
+
+
+run = True
+while run:
+    print("Welcome to Medieval Mania")
+    menu_input = input(
+        " 1. Play Game \n 2. How To Play \n 3. Quit Game \nEnter choice: ")
+    if menu_input == "1":
+        initialise_game()
+        run = False
+    elif menu_input == "2":
+        how_to_play()
+        run = False
+    elif menu_input == "3":
+        run = False
