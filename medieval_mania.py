@@ -96,7 +96,7 @@ def select_army(armies):
 def army_synopsis(army_name):
 
     if army_name == "Mongols":
-        return "\nA great choice! The Mongol steppe is known for it's ruthlessness and tenacity on the battlefield, which lead to the fastest growth of an empire we had ever seen.\n\nWith their nomadic warriors and horseback archers, the motto for this force is, hit them hard and fast! \n\nUnits: \nLight - Horseback Archers \nMedium - Nomad Warriors \nHeavy - Steppe Saboteurs\n"
+        return "\nA great choice! The Mongol steppe is known for it's ruthlessness and tenacity on the battlefield, which lead to the fastest growth of any empire we had ever seen.\n\nWith their nomadic warriors and horseback archers, it was easy for this force to quickly and unexpectedly hit their targets like a scourge fire. the motto for this force is, hit them hard and fast! \n\nUnits: \nLight - Horseback Archers \nMedium - Nomad Warriors \nHeavy - Steppe Saboteurs\n"
 
     elif army_name == "Romans":
         return "\nFrom your choice, you are either an admirer of tradition or someone who upholds the doctrine of papal infallibility. \n\nThe Holy Roman Empire, not to be mistaken with the ancient romans, are nevertheless a continuation of the same great empiric tradition. \n\nKnown for their studded steel armour and long swords, their defense is impenetrable while striking with force! \n\nUnits: \nLight - Horseback Archers \nMedium - Nomad Warriors \nHeavy - Steppe Saboteurs\n"
@@ -108,6 +108,13 @@ def army_synopsis(army_name):
         return "\nThrough their adherence to the Bushido code, the Japanese army and its great martial tradition is a testament to chivalry and benevolence. During the Mongol invasion of Japan, despite the ruthlessness of the invading forces of Kublai, the Japanese managed to defend their island while staying true to their morals. \n\nNothing is more emblematic of a true warrior than a samurai and his hardened Katana. \n\nLight - Shinobi Ninja \nMedium - Samurai \nHeavy - Hwacha Engineers\n"
 
 
+def begin_wars(player_army, enemy_armies):
+    for i, army in enumerate(enemy_armies):
+        print(f"War {i+1} - {army.name}")
+        while army.health != 100 and player_army != 100:
+            input("Select a unit from your army ")
+
+
 run = True
 while run:
     print("Welcome to Medieval Mania")
@@ -116,7 +123,10 @@ while run:
     if menu_input == "1":
         armies = initialise_armies()
         player_army = select_army(armies)
+        enemy_armies = armies.remove(player_army)
+        print(enemy_armies)
         print(army_synopsis(player_army.name))
+        begin_wars(player_army, armies)
         run = False
     elif menu_input == "2":
         how_to_play()
