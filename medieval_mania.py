@@ -91,7 +91,7 @@ def select_army(armies):
 def army_synopsis(army_name):
 
     if army_name == "Mongols":
-        return "\nA great choice! The Mongol steppe is known for it's ruthlessness and tenacity on the battlefield, which lead to the fastest growth of any empire we had ever seen.\n\nWith their nomadic warriors and horseback archers, it was easy for this force to quickly and unexpectedly hit their targets like a scourge fire. the motto for this force is, hit them hard and fast! \n\nUnits: \nLight - Horseback Archers \nMedium - Nomad Warriors \nHeavy - Steppe Saboteurs\n"
+        return "\nA great choice! The Mongol steppe is known for it's ruthlessness and tenacity on the battlefield, which lead to the fastest growth of any empire we had ever seen.\n\nWith their nomadic warriors and horseback archers, it was easy for this force to quickly and unexpectedly hit their targets like a scourge of fire. the motto for this force is, hit them hard and fast! \n\nUnits: \nLight - Horseback Archers \nMedium - Nomad Warriors \nHeavy - Steppe Saboteurs\n"
 
     elif army_name == "Romans":
         return "\nFrom your choice, you are either an admirer of tradition or someone who upholds the doctrine of papal infallibility. \n\nThe Holy Roman Empire, not to be mistaken with the ancient romans, are nevertheless a continuation of the same great empiric tradition. \n\nKnown for their studded steel armour and long swords, their defense is impenetrable while striking with force! \n\nUnits: \nLight - Horseback Archers \nMedium - Nomad Warriors \nHeavy - Steppe Saboteurs\n"
@@ -104,16 +104,44 @@ def army_synopsis(army_name):
 
 
 def begin_wars(player_army, enemy_armies):
+
     for i, enemy_army in enumerate(enemy_armies):
         print(f"War {i+1} - {enemy_army.name}\n")
-        while enemy_army.health > 0 and player_army.health > 0:
+
+        while ((enemy_army.health > 0) and (player_army.health > 0)):
+
             unit_selected = input(
-                f"Select a unit from your army to engage the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
+                f"Select a unit from your army to attack the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
             enemy_unit = rand.choice(enemy_army.unit_list)
+
             damage_done = player_army.unit_list[int(
                 unit_selected) - 1].attack(enemy_unit)
+
             enemy_army.health -= damage_done
-            print(enemy_army.health)
+            print(f"enemy health: {enemy_army.health}")
+            print(f"your health: {player_army.health}\n")
+
+            if enemy_army.health < 0:
+                continue
+
+            unit_selected = input(
+                f"Select a unit from your army to defend from the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
+            enemy_unit = rand.choice(enemy_army.unit_list)
+
+            damage_done = enemy_unit.attack(player_army.unit_list[int(
+                unit_selected) - 1])
+
+            player_army.health -= damage_done
+            print(f"enemy health: {enemy_army.health}")
+            print(f"your health: {player_army.health}\n")
+
+        if enemy_army.health <= 0:
+            print("You won the war\n")
+
+        elif player_army.health <= 0:
+            print("You lost the war\n")
+
+        player_army.health = 100
 
 
 run = True
