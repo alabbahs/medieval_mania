@@ -106,10 +106,10 @@ def army_synopsis(army_name):
 def begin_wars(player_army, enemy_armies):
     for i, enemy_army in enumerate(enemy_armies):
         print(f"War {i+1} - {enemy_army.name}\n")
-        while enemy_army.health != 0 and player_army != 0:
+        while enemy_army.health > 0 and player_army.health > 0:
             unit_selected = input(
                 f"Select a unit from your army to engage the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
-            enemy_unit = enemy_army.light_unit
+            enemy_unit = rand.choice(enemy_army.unit_list)
             damage_done = player_army.unit_list[int(
                 unit_selected) - 1].attack(enemy_unit)
             enemy_army.health -= damage_done
