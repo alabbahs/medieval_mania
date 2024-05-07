@@ -15,45 +15,39 @@ class light_unit:
     def __init__(self, name):
         self.name = name
 
-    def attack(enemy, terrain):
-        if (terrain == "forest") and (type(enemy).__name__ == "heavy_unit"):
-            enemy.army.health -= 30
-
-        elif (terrain == "forest") and (type(enemy).__name__ == "heavy_unit"):
-            enemy.army.health -= 30
-
-        elif (terrain == "forest") and (type(enemy).__name__ == "heavy_unit"):
-            enemy.army.health -= 30
+    def attack(self, enemy):
+        if enemy.__class__.__name__ == "light_unit":
+            return 20
+        if enemy.__class__.__name__ == "medium_unit":
+            return 10
+        if enemy.__class__.__name__ == "heavy_unit":
+            return 30
 
 
 class medium_unit:
     def __init__(self, name):
         self.name = name
 
-    def attack(enemy, terrain):
-        if (terrain == "forest") and (type(enemy).__name__ == "heavy_unit"):
-            enemy.army.health -= 30
-
-        elif (terrain == "forest") and (type(enemy).__name__ == "heavy_unit"):
-            enemy.army.health -= 30
-
-        elif (terrain == "forest") and (type(enemy).__name__ == "heavy_unit"):
-            enemy.army.health -= 30
+    def attack(self, enemy):
+        if enemy.__class__.__name__ == "light_unit":
+            return 30
+        if enemy.__class__.__name__ == "medium_unit":
+            return 20
+        if enemy.__class__.__name__ == "heavy_unit":
+            return 10
 
 
 class heavy_unit:
     def __init__(self, name):
         self.name = name
 
-    def attack(enemy, terrain):
-        if (terrain == "forest") and (type(enemy).__name__ == "heavy_unit"):
-            enemy.army.health -= 30
-
-        elif (terrain == "forest") and (type(enemy).__name__ == "heavy_unit"):
-            enemy.army.health -= 30
-
-        elif (terrain == "forest") and (type(enemy).__name__ == "heavy_unit"):
-            enemy.army.health -= 30
+    def attack(self, enemy):
+        if enemy.__class__.__name__ == "light_unit":
+            return 10
+        if enemy.__class__.__name__ == "medium_unit":
+            return 30
+        if enemy.__class__.__name__ == "heavy_unit":
+            return 20
 
 
 def initialise_armies():
@@ -103,21 +97,23 @@ def army_synopsis(army_name):
         return "\nFrom your choice, you are either an admirer of tradition or someone who upholds the doctrine of papal infallibility. \n\nThe Holy Roman Empire, not to be mistaken with the ancient romans, are nevertheless a continuation of the same great empiric tradition. \n\nKnown for their studded steel armour and long swords, their defense is impenetrable while striking with force! \n\nUnits: \nLight - Horseback Archers \nMedium - Nomad Warriors \nHeavy - Steppe Saboteurs\n"
 
     elif army_name == "Mamluks":
-        return "\nIt is said that when the Arabs were unable to maintain the islamic empire they had formed, the Persians carried the intellectual tradition while the Turks spearheaded the military. \n\nThis military is best summed by its elite class of warriors, the Janissaries, a battalion of young men raised and tempered by an intense regimen of martial training and discipline. \n\nUnits: \nLight - Nubian Archers \nMedium - Janissaries \nHeavy - Turkic Cavalry\n"
+        return "\nIt is said that when the Arabs were unable to maintain the islamic empire they had formed, the Persians carried the intellectual tradition while the Turks spearheaded the military. \n\nThis force is best summed by its elite class of warriors, the Janissaries, a battalion of young men raised and tempered by an intense regimen of martial training and discipline. \n\nUnits: \nLight - Nubian Archers \nMedium - Janissaries \nHeavy - Turkic Cavalry\n"
 
     elif army_name == "Japanese":
-        return "\nThrough their adherence to the Bushido code, the Japanese army and its great martial tradition is a testament to chivalry and benevolence. During the Mongol invasion of Japan, despite the ruthlessness of the invading forces of Kublai, the Japanese managed to defend their island while staying true to their morals. \n\nNothing is more emblematic of a true warrior than a samurai and his hardened Katana. \n\nLight - Shinobi Ninja \nMedium - Samurai \nHeavy - Hwacha Engineers\n"
+        return "\nThrough their adherence to the Bushido code, the Japanese army and its great martial tradition is a testament to chivalry and benevolence. During the Mongol invasion of Japan, despite the ruthlessness of the invading forces of Kublai, the Japanese managed to defend their island while staying true to their moral code. \n\nNothing is more emblematic of a true warrior than a samurai and his hardened Katana. \n\nLight - Shinobi Ninja \nMedium - Samurai \nHeavy - Hwacha Engineers\n"
 
 
 def begin_wars(player_army, enemy_armies):
-    for i, army in enumerate(enemy_armies):
-        print(f"War {i+1} - {army.name}")
-        while army.health != 0 and player_army != 0:
+    for i, enemy_army in enumerate(enemy_armies):
+        print(f"War {i+1} - {enemy_army.name}\n")
+        while enemy_army.health != 0 and player_army != 0:
             unit_selected = input(
-                f"Select a unit from your army to engage the opposing force: \n\n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
-            enemy_unit = army.light_unit
-            player_army.unit_list[int(unit_selected) -
-                                  1].attack()
+                f"Select a unit from your army to engage the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
+            enemy_unit = enemy_army.light_unit
+            damage_done = player_army.unit_list[int(
+                unit_selected) - 1].attack(enemy_unit)
+            enemy_army.health -= damage_done
+            print(enemy_army.health)
 
 
 run = True
