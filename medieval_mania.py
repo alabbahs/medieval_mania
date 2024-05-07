@@ -1,4 +1,4 @@
-print("program starting")
+import random as rand
 
 
 class Army:
@@ -8,6 +8,7 @@ class Army:
         self.light_unit = light_unit
         self.medium_unit = medium_unit
         self.heavy_unit = heavy_unit
+        self.unit_list = [light_unit, medium_unit, heavy_unit]
 
 
 class light_unit:
@@ -111,8 +112,12 @@ def army_synopsis(army_name):
 def begin_wars(player_army, enemy_armies):
     for i, army in enumerate(enemy_armies):
         print(f"War {i+1} - {army.name}")
-        while army.health != 100 and player_army != 100:
-            input("Select a unit from your army ")
+        while army.health != 0 and player_army != 0:
+            unit_selected = input(
+                f"Select a unit from your army to engage the opposing force: \n\n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
+            enemy_unit = army.light_unit
+            player_army.unit_list[int(unit_selected) -
+                                  1].attack()
 
 
 run = True
