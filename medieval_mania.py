@@ -154,7 +154,24 @@ def show_health(army1, army2):
 
 
 def terrain_roll():
-    return rand.choice(["Forest", "Open field", "Hill"])
+    input("\nPress Enter to roll for the terrain this war will proceed on")
+    print("Rolling...")
+
+    terrain = rand.choice(["Forest", "Open field", "Hill"])
+
+    print(f"Terrain to be fought on: {terrain}\n")
+
+    return terrain
+
+
+def enemy_terrain_roll():
+    print("\nYour opponent is rolling for the terrain...")
+
+    terrain = rand.choice(["Forest", "Open field", "Hill"])
+
+    print(f"Terrain to be fought on: {terrain}\n")
+
+    return terrain
 
 
 def begin_wars(player_army, enemy_armies):
@@ -184,7 +201,7 @@ def begin_wars(player_army, enemy_armies):
                 f"Select a unit from your army to defend from the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
             enemy_unit = rand.choice(enemy_army.unit_list)
 
-            terrain = terrain_roll()
+            terrain = enemy_terrain_roll()
 
             damage_done = enemy_unit.attack(player_unit, terrain)
 
