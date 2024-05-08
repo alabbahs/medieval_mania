@@ -123,13 +123,16 @@ def initialise_armies():
 
 
 def how_to_play():
-    print("these are the game rules")
+    print("\nthese are the game rules\n")
 
 
 def select_army(armies):
     print("\nSelect an empire")
     army_choice = input(
         " 1. Mongol \n 2. Japanese \n 3. Mamluk \n 4. Roman \nEnter choice:")
+    if army_choice not in ["1", "2", "3", "4"]:
+        print("INVALID INPUT! Please enter 1, 2, 3 or 4")
+        select_army(armies)
     return armies[int(army_choice)-1]
 
 
@@ -174,17 +177,54 @@ def enemy_terrain_roll():
     return terrain
 
 
+def unit_select():
+    unit_selected = input(
+        f"Select a unit from your army to engage the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
+    player_unit = player_army.unit_list[int(
+        unit_selected) - 1]
+    if unit_selected not in ["1", "2", "3"]:
+        print("INVALID INPUT! Please enter 1, 2 or 3")
+        unit_select()
+    else:
+        return player_unit
+
+
+def check_winner(player_army, enemy_army, win_counter, loss_counter):
+    if enemy_army.health <= 0:
+        print("You won the war\n")
+        win_counter += 1
+        print(f"wins - {win_counter}")
+        print(f"losses - {loss_counter}")
+
+    elif player_army.health <= 0:
+        print("You lost the war\n")
+        loss_counter += 1
+        print(f"wins - {win_counter}")
+        print(f"losses - {loss_counter}")
+
+
+def check_final_score(win_counter, loss_counter):
+    if win_counter == 3 and loss_counter == 0:
+        print("THE KHANS TRIUMPH\n\n")
+    elif win_counter == 2 and loss_counter == 1:
+        print("Sun Tzu's Successn\n\n")
+    elif win_counter == 1 and loss_counter == 2:
+        print("\nHannibal's Retreat\n\n")
+    elif win_counter == 0 and loss_counter == 3:
+        print("\nNapoleons Waterloo\n\n")
+
+
 def begin_wars(player_army, enemy_armies):
+
+    win_counter = 0
+    loss_counter = 0
 
     for i, enemy_army in enumerate(enemy_armies):
         print(f"War {i+1} - {enemy_army.name}\n")
 
         while ((enemy_army.health > 0) and (player_army.health > 0)):
 
-            unit_selected = input(
-                f"Select a unit from your army to attack the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
-            player_unit = player_army.unit_list[int(
-                unit_selected) - 1]
+            player_unit = unit_select()
             enemy_unit = rand.choice(enemy_army.unit_list)
 
             terrain = terrain_roll()
@@ -197,8 +237,7 @@ def begin_wars(player_army, enemy_armies):
             if enemy_army.health <= 0:
                 continue
 
-            unit_selected = input(
-                f"Select a unit from your army to defend from the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
+            player_unit = unit_select()
             enemy_unit = rand.choice(enemy_army.unit_list)
 
             terrain = enemy_terrain_roll()
@@ -208,13 +247,22 @@ def begin_wars(player_army, enemy_armies):
             player_army.health -= damage_done
             show_health(player_army, enemy_army)
 
+        # check_winner(player_army, enemy_army, win_counter, loss_counter)
         if enemy_army.health <= 0:
             print("You won the war\n")
+            win_counter += 1
+            print(f"wins - {win_counter}")
+            print(f"losses - {loss_counter}\n")
 
         elif player_army.health <= 0:
             print("You lost the war\n")
+            loss_counter += 1
+            print(f"wins - {win_counter}")
+            print(f"losses - {loss_counter}\n")
 
         player_army.health = 100
+
+    check_final_score(win_counter, loss_counter)
 
 
 run = True
