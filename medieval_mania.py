@@ -15,39 +15,84 @@ class light_unit:
     def __init__(self, name):
         self.name = name
 
-    def attack(self, enemy):
+    def attack(self, enemy, terrain):
         if enemy.__class__.__name__ == "light_unit":
-            return 20
+            if terrain == "Forest":
+                return 20
+            elif terrain == "Open field":
+                return 20
+            elif terrain == "Hill":
+                return 20
         if enemy.__class__.__name__ == "medium_unit":
-            return 10
+            if terrain == "Forest":
+                return 10
+            elif terrain == "Open field":
+                return 0
+            elif terrain == "Hill":
+                return 5
         if enemy.__class__.__name__ == "heavy_unit":
-            return 30
+            if terrain == "Forest":
+                return 40
+            elif terrain == "Open field":
+                return 30
+            elif terrain == "Hill":
+                return 20
 
 
 class medium_unit:
     def __init__(self, name):
         self.name = name
 
-    def attack(self, enemy):
+    def attack(self, enemy, terrain):
         if enemy.__class__.__name__ == "light_unit":
-            return 30
+            if terrain == "Forest":
+                return 20
+            elif terrain == "Open field":
+                return 40
+            elif terrain == "Hill":
+                return 30
         if enemy.__class__.__name__ == "medium_unit":
-            return 20
+            if terrain == "Forest":
+                return 20
+            elif terrain == "Open field":
+                return 20
+            elif terrain == "Hill":
+                return 20
         if enemy.__class__.__name__ == "heavy_unit":
-            return 10
+            if terrain == "Forest":
+                return 5
+            elif terrain == "Open field":
+                return 10
+            elif terrain == "Hill":
+                return 0
 
 
 class heavy_unit:
     def __init__(self, name):
         self.name = name
 
-    def attack(self, enemy):
+    def attack(self, enemy, terrain):
         if enemy.__class__.__name__ == "light_unit":
-            return 10
+            if terrain == "Forest":
+                return 0
+            elif terrain == "Open field":
+                return 5
+            elif terrain == "Hill":
+                return 10
         if enemy.__class__.__name__ == "medium_unit":
-            return 30
+            if terrain == "Forest":
+                return 30
+            elif terrain == "Open field":
+                return 20
+            elif terrain == "Hill":
+                return 40
         if enemy.__class__.__name__ == "heavy_unit":
-            return 20
+            if terrain == "Forest":
+                return 20
+            elif terrain == "Open field":
+                return 20
+            elif terrain == "Hill":
+                return 20
 
 
 def initialise_armies():
@@ -103,6 +148,15 @@ def army_synopsis(army_name):
         return "\nThrough their adherence to the Bushido code, the Japanese army and its great martial tradition is a testament to chivalry and benevolence. During the Mongol invasion of Japan, despite the ruthlessness of the invading forces of Kublai, the Japanese managed to defend their island while staying true to their moral code. \n\nNothing is more emblematic of a true warrior than a samurai and his hardened Katana. \n\nLight - Shinobi Ninja \nMedium - Samurai \nHeavy - Hwacha Engineers\n"
 
 
+def show_health(army1, army2):
+    print(f"your health: {army1.health}")
+    print(f"enemy health: {army2.health}\n")
+
+
+def terrain_roll():
+    return rand.choice(["Forest", "Open field", "Hill"])
+
+
 def begin_wars(player_army, enemy_armies):
 
     for i, enemy_army in enumerate(enemy_armies):
@@ -112,28 +166,30 @@ def begin_wars(player_army, enemy_armies):
 
             unit_selected = input(
                 f"Select a unit from your army to attack the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
+            player_unit = player_army.unit_list[int(
+                unit_selected) - 1]
             enemy_unit = rand.choice(enemy_army.unit_list)
 
-            damage_done = player_army.unit_list[int(
-                unit_selected) - 1].attack(enemy_unit)
+            terrain = terrain_roll()
+
+            damage_done = player_unit.attack(enemy_unit, terrain)
 
             enemy_army.health -= damage_done
-            print(f"enemy health: {enemy_army.health}")
-            print(f"your health: {player_army.health}\n")
+            show_health(player_army, enemy_army)
 
-            if enemy_army.health < 0:
+            if enemy_army.health <= 0:
                 continue
 
             unit_selected = input(
                 f"Select a unit from your army to defend from the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
             enemy_unit = rand.choice(enemy_army.unit_list)
 
-            damage_done = enemy_unit.attack(player_army.unit_list[int(
-                unit_selected) - 1])
+            terrain = terrain_roll()
+
+            damage_done = enemy_unit.attack(player_unit, terrain)
 
             player_army.health -= damage_done
-            print(f"enemy health: {enemy_army.health}")
-            print(f"your health: {player_army.health}\n")
+            show_health(player_army, enemy_army)
 
         if enemy_army.health <= 0:
             print("You won the war\n")
