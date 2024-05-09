@@ -35,9 +35,12 @@ once the war is finished, you will proceed until the next army and repeat the sa
 
 Given your score out of all three wars, you will be given a medal of honour or shame named with an appropriate historical counterpart.
 
-3-0 THE KHANS TRIUMPH
-2-1 Sun Tzu's Success
-1-2 Hannibal's Retreat
-0-3 Napoleons Waterloo
+3-0 THE KHANS TRIUMPH.
+
+2-1 Sun Tzu's Success.
+
+1-2 Hannibal's Retreat.
+
+0-3 Napoleons Waterloo.
 
 The game will then execute the program when finished and you will have to rerun the python program to play again.
