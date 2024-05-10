@@ -15,6 +15,7 @@ class light_unit:
     def __init__(self, name):
         self.name = name
 
+    # Damage done (number returned) adjusted based on enemy unit and terrain advantage/disadvantage, done for all unit types
     def attack(self, enemy, terrain):
         if enemy.__class__.__name__ == "light_unit":
             if terrain == "Forest":
@@ -95,6 +96,7 @@ class heavy_unit:
                 return 20
 
 
+# This function is called when the game is started to create all the armies with their specific units
 def initialise_armies():
 
     auxiliary_archers = light_unit("Auxiliary Archers")
@@ -123,9 +125,17 @@ def initialise_armies():
 
 
 def how_to_play():
-    print("\nthese are the game rules\n")
+    print("\nGame Rules:\n")
+    print("1. Select an army from the listed historical empires.")
+    print("2. Battles are turn-based. In each turn, you will:")
+    print("   - Choose a unit (light, medium, or heavy) to send into battle.")
+    print("   - Roll for terrain (Forest, Open field, or Hill), which affects combat outcomes.")
+    print("3. Each unit type has strengths and weaknesses depending on the enemy unit type and the terrain.")
+    print("4. The goal is to reduce the enemy army's health to zero to win the battle.")
+    print("5. Win the game by defeating all enemy armies in successive battles.\n")
 
 
+# Here the armies input is the list of all the armies that were returned in the initialise_armies() function
 def select_army(armies):
     print("\nSelect an empire")
     army_choice = input(
@@ -156,8 +166,9 @@ def show_health(army1, army2):
     print(f"enemy health: {army2.health}\n")
 
 
+# Randomises terrain that will be fought on
 def terrain_roll():
-    input("\nPress Enter to roll for the terrain this war will proceed on")
+    input("\nPress Enter to roll for the terrain this bout will proceed on")
     print("Rolling...")
 
     terrain = rand.choice(["Forest", "Open field", "Hill"])
@@ -177,17 +188,21 @@ def enemy_terrain_roll():
     return terrain
 
 
+# Asks player which unit they want to send in, returns the unit
 def unit_select():
     unit_selected = input(
-        f"Select a unit from your army to engage the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n")
+        f"Select a unit from your army to engage the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n Enter choice: ")
     player_unit = player_army.unit_list[int(
         unit_selected) - 1]
+    # To catch any invalid inputs, avoiding indexing out of range
     if unit_selected not in ["1", "2", "3"]:
         print("INVALID INPUT! Please enter 1, 2 or 3")
         unit_select()
     else:
         return player_unit
 
+
+# This is called after each turn in order to check if one of the armies has lost
 
 def check_winner(player_army, enemy_army, win_counter, loss_counter):
     if enemy_army.health <= 0:
@@ -203,40 +218,58 @@ def check_winner(player_army, enemy_army, win_counter, loss_counter):
         print(f"losses - {loss_counter}")
 
 
+# Prints the final record of all the wars with a title for each score
+
 def check_final_score(win_counter, loss_counter):
     if win_counter == 3 and loss_counter == 0:
-        print("THE KHANS TRIUMPH\n\n")
+        print("THE KHANS' TRIUMPH\n\n")
+        print("Much like Genghis Khan’s Mongol Empire, your flawless campaign has swept across the continents, unmatched in both strategy and force. Genghis Khan, known for his ability to utilize superior military strategies to conquer vast territories, would be proud of your achievement.\n")
+        print("\n - 'I am the punishment of God... If you had not committed great sins, God would not have sent a punishment like me upon you.' - Genghis Khan\n")
     elif win_counter == 2 and loss_counter == 1:
-        print("Sun Tzu's Successn\n\n")
+        print("Sun Tzu's Success\n\n")
+        print("Your strategic prowess echoes that of Sun Tzu, the ancient Chinese military strategist, author of 'The Art of War'. Your victories, achieved through the careful balance of strength and wisdom, remind us of Sun Tzu's teachings on the importance of knowing when to engage and when to hold back to ensure overall success.\n")
+        print(" - 'Victorious warriors win first and then go to war, while defeated warriors go to war first and then seek to win.' - Sun Tzu\n")
     elif win_counter == 1 and loss_counter == 2:
-        print("\nHannibal's Retreat\n\n")
+        print("Hannibal's Retreat\n")
+        print("Your strife is like that of Hannibal Barca's during the Second Punic War, you demonstrated tactical genius in several battles but faced strategic setbacks ultimately. Hannibal, known for his daring crossing of the Alps and victories in enemy territory, eventually had to retreat due to the lack of support and resources, similar to the challenges you faced.\n")
+        print("- 'I will either find a way, or make one.' - Hannibal Barca\n")
     elif win_counter == 0 and loss_counter == 3:
-        print("\nNapoleons Waterloo\n\n")
+        print("Napoleon's Waterloo\n\n")
+        print("Your campaign ended much like Napoleon’s at Waterloo—a defeat that marked the end of an era. Napoleon Bonaparte, once the master of Europe, met his match at Waterloo in 1815, which decisively ended his rule and reshaped European politics. Like Napoleon, you've faced formidable opposition that halted your conquests.\n")
+        print(" - 'Never interrupt your enemy when he is making a mistake.' - Napoleon Bonaparte\n")
 
+
+# player_army is the one picked from the list of armies returned by initialise_armies(), enemy_armies is a list of the remaining armies that will be fought against.
 
 def begin_wars(player_army, enemy_armies):
 
     win_counter = 0
     loss_counter = 0
 
+    # i is the number of iterations in this for loop, allowing us to track and display which number war is being fought
     for i, enemy_army in enumerate(enemy_armies):
         print(f"War {i+1} - {enemy_army.name}\n")
 
         while ((enemy_army.health > 0) and (player_army.health > 0)):
 
+            # Players turn to attack
             player_unit = unit_select()
             enemy_unit = rand.choice(enemy_army.unit_list)
 
             terrain = terrain_roll()
 
+            # attack calculates damage done given enemy and terrain
             damage_done = player_unit.attack(enemy_unit, terrain)
 
+            # Subtract health by number returned from attack()
             enemy_army.health -= damage_done
             show_health(player_army, enemy_army)
 
+            # Line added to account for while loop not breaking if enemy is defeated, before this the game would wait for the enemies turn
             if enemy_army.health <= 0:
                 continue
 
+            # Opponent/CPU turn to attack
             player_unit = unit_select()
             enemy_unit = rand.choice(enemy_army.unit_list)
 
@@ -247,7 +280,6 @@ def begin_wars(player_army, enemy_armies):
             player_army.health -= damage_done
             show_health(player_army, enemy_army)
 
-        # check_winner(player_army, enemy_army, win_counter, loss_counter)
         if enemy_army.health <= 0:
             print("You won the war\n")
             win_counter += 1
@@ -262,9 +294,11 @@ def begin_wars(player_army, enemy_armies):
 
         player_army.health = 100
 
+    # Checking the score and return appropriate message
     check_final_score(win_counter, loss_counter)
 
 
+# Game loop
 run = True
 while run:
     print("Welcome to Medieval Mania")
@@ -274,7 +308,6 @@ while run:
         armies = initialise_armies()
         player_army = select_army(armies)
         enemy_armies = armies.remove(player_army)
-        print(enemy_armies)
         print(army_synopsis(player_army.name))
         begin_wars(player_army, armies)
         run = False
