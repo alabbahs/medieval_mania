@@ -194,12 +194,12 @@ def unit_select():
         f"Select a unit from your army to engage the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n Enter choice: ")
 
     # To catch any invalid inputs, avoiding indexing out of range
-    if unit_selected not in ["1", "2", "3"]:
-        print("\nINVALID INPUT! Please enter 1, 2 or 3")
-        unit_select()
-    else:
+    if unit_selected in ["1", "2", "3"]:
         player_unit = player_army.unit_list[int(unit_selected) - 1]
         return player_unit
+    else:
+        print("\nINVALID INPUT! Please enter 1, 2 or 3")
+        return unit_select()
 
 
 # This is called after each turn in order to check if one of the armies has lost
