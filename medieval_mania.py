@@ -141,7 +141,7 @@ def select_army(armies):
     army_choice = input(
         " 1. Mongol \n 2. Japanese \n 3. Mamluk \n 4. Roman \nEnter choice:")
     if army_choice not in ["1", "2", "3", "4"]:
-        print("INVALID INPUT! Please enter 1, 2, 3 or 4")
+        print("\nINVALID INPUT! Please enter 1, 2, 3 or 4")
         select_army(armies)
     return armies[int(army_choice)-1]
 
@@ -192,13 +192,13 @@ def enemy_terrain_roll():
 def unit_select():
     unit_selected = input(
         f"Select a unit from your army to engage the opposing force: \n1.{player_army.light_unit.name} \n2.{player_army.medium_unit.name} \n3.{player_army.heavy_unit.name} \n\n Enter choice: ")
-    player_unit = player_army.unit_list[int(
-        unit_selected) - 1]
+
     # To catch any invalid inputs, avoiding indexing out of range
     if unit_selected not in ["1", "2", "3"]:
-        print("INVALID INPUT! Please enter 1, 2 or 3")
+        print("\nINVALID INPUT! Please enter 1, 2 or 3")
         unit_select()
     else:
+        player_unit = player_army.unit_list[int(unit_selected) - 1]
         return player_unit
 
 
@@ -301,7 +301,7 @@ def begin_wars(player_army, enemy_armies):
 # Game loop
 run = True
 while run:
-    print("Welcome to Medieval Mania")
+    print("\n\nWelcome to Medieval Mania")
     menu_input = input(
         " 1. Play Game \n 2. How To Play \n 3. Quit Game \nEnter choice: ")
     if menu_input == "1":
